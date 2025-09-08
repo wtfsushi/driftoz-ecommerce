@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ProductCardModern from '../components/common/ProductCardModern';
 import { useCart } from '../context/CartContext';
 import { featuredProducts, newArrivals, testimonials } from '../data/dummyData';
+import heroVideo from '../photo-videos/bmw-lights-vid.mp4';
 
 const Home = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -29,8 +30,29 @@ const Home = () => {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         {/* Background */}
         <div className="absolute inset-0">
-          {/* Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-background-primary via-background-secondary to-background-tertiary"></div>
+          {/* Full-bleed background video */}
+          <video
+            className="absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none select-none mt-10"
+            src={heroVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+          />
+
+          {/* Semi-transparent gradient overlay to let video show through */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/40"></div>
+
+          {/* Soft vignette for readability */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(1200px 600px at 50% 30%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.45) 100%)',
+            }}
+          />
           
           {/* Animated Mesh */}
           <div className="absolute inset-0 opacity-20">

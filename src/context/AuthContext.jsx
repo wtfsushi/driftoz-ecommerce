@@ -1,39 +1,49 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import app from '../firebase/config';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const auth = getAuth();
 
     const login = async (email, password) => {
-        // Mock login for now
-        setCurrentUser({ email, displayName: email.split('@')[0] });
-        return Promise.resolve();
+        await signInWithEmailAndPassword(auth, email, password);
     };
 
-    const logout = () => {
-        setCurrentUser(null);
+    const logout = () => signOut(auth);
+
+    const signup = async (email, password, displayName) => {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        if (displayName) {
+            await updateProfile(cred.user, { displayName });
+        }
+        return cred.user;
     };
 
-    const signup = async (email, password) => {
-        // Mock signup for now
-        setCurrentUser({ email, displayName: email.split('@')[0] });
-        return Promise.resolve();
-    };
+    // Observe auth state
+    useEffect(() => {
+        const unsub = onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user);
+            setLoading(false);
+        });
+        return () => unsub();
+    }, []);
 
     const value = {
         user: currentUser,
         currentUser,
         login,
         logout,
-        signup,
+    signup,
         loading
     };
 
     return (
         <AuthContext.Provider value={value}>
-            {children}
+            {!loading && children}
         </AuthContext.Provider>
     );
 };

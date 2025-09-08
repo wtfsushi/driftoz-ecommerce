@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../hooks/useAuth';
 
 // Clean, modern, responsive header
 const Header = () => {
@@ -8,6 +9,7 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { cartItems } = useCart();
   const location = useLocation();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 50);
@@ -102,15 +104,37 @@ const Header = () => {
             </Link>
 
             <div className="hidden md:flex items-center space-x-2">
-              <Link to="/login" className="px-3 py-2 text-gray-300 hover:text-orange-400 font-medium transition-colors duration-300">
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Sign Up
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="px-3 py-2 text-gray-300 hover:text-orange-400 font-medium transition-colors duration-300"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="px-4 py-2 bg-gray-800/60 hover:bg-gray-700 text-gray-200 font-medium rounded-lg transition-all duration-300"
+                  >
+                    Logout
+                  </button>
+                  <div className="ml-1 w-9 h-9 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 text-white flex items-center justify-center font-bold">
+                    {user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase()}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="px-3 py-2 text-gray-300 hover:text-orange-400 font-medium transition-colors duration-300">
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
 
             <button
@@ -152,20 +176,40 @@ const Header = () => {
               })}
 
               <div className="pt-4 space-y-3 border-t border-gray-800">
-                <Link
-                  to="/login"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block w-full px-4 py-3 text-center text-gray-300 hover:text-orange-400 font-medium transition-colors duration-300"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block w-full px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl transition-all duration-300 text-center"
-                >
-                  Sign Up
-                </Link>
+                {user ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block w-full px-4 py-3 text-center text-gray-300 hover:text-orange-400 font-medium transition-colors duration-300"
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={() => { logout(); setIsMenuOpen(false); }}
+                      className="block w-full px-4 py-3 bg-gray-800/60 hover:bg-gray-700 text-gray-200 font-medium rounded-xl transition-all duration-300 text-center"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block w-full px-4 py-3 text-center text-gray-300 hover:text-orange-400 font-medium transition-colors duration-300"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/register"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block w-full px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl transition-all duration-300 text-center"
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
