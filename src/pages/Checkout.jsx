@@ -2,24 +2,14 @@ import React from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../hooks/useAuth';
 import Button from '../components/common/Button';
-import { useOrders } from '../context/OrdersContext';
-import { useHistory } from 'react-router-dom';
 
 const Checkout = () => {
-    const { cartItems, totalAmount, clearCart } = useCart();
+    const { cartItems, totalAmount } = useCart();
     const { user } = useAuth();
-    const { createOrder } = useOrders();
-    const history = useHistory();
 
     const handleCheckout = () => {
-        if (!user) return;
-        const order = createOrder({
-            userId: user.uid,
-            items: cartItems,
-            total: totalAmount,
-        });
-        clearCart();
-        history.push('/dashboard');
+        // Logic for handling checkout process
+        console.log('Proceeding to checkout with:', cartItems);
     };
 
     return (

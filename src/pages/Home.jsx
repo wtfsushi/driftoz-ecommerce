@@ -24,9 +24,9 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen p-6">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden ">
         {/* Background Video/Animation */}
         <div className="absolute inset-0 bg-gradient-to-br from-drift-black via-dark-900 to-drift-gray">
           {/* Animated background elements */}

@@ -20,6 +20,8 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Admin from './pages/Admin';
+import Dashboard from './pages/Dashboard';
+import PrivateRoute from './components/common/PrivateRoute';
 
 // Styles
 import './main.css';
@@ -69,6 +71,7 @@ const App = () => {
                     <Route path="/checkout" component={Checkout} />
                     <Route path="/login" component={Login} />
                     <Route path="/register" component={Register} />
+                    <PrivateRoute path="/dashboard" component={Dashboard} />
                     <Route path="/admin" component={Admin} />
                   </Switch>
                 </main>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import { OrdersProvider } from './context/OrdersContext';
 
 // Components
 import ErrorBoundary from './components/common/ErrorBoundary';
@@ -12,7 +11,6 @@ import Header from './components/layout/Header';
 import HomeModern from './pages/HomeModern';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
 
 // Styles
 import './main.css';
@@ -23,7 +21,6 @@ const App = () => {
       <div className="App relative min-h-screen bg-black text-white">
         <AuthProvider>
           <CartProvider>
-            <OrdersProvider>
             <Router>
               <Header />
               
@@ -32,7 +29,6 @@ const App = () => {
                   <Route exact path="/" component={HomeModern} />
                   <Route path="/login" component={Login} />
                   <Route path="/register" component={Register} />
-                  <Route path="/dashboard" component={Dashboard} />
                   <Route path="*" render={() => (
                     <div className="text-center py-16">
                       <h2 className="text-2xl text-orange-400 mb-4">Page Not Found</h2>
@@ -42,7 +38,6 @@ const App = () => {
                 </Switch>
               </main>
             </Router>
-            </OrdersProvider>
           </CartProvider>
         </AuthProvider>
       </div>

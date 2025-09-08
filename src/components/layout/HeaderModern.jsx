@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { user, logout } = useAuth();
 
   // Handle scroll effect
   useEffect(() => {
@@ -99,18 +101,32 @@ const Header = () => {
 
             {/* User Actions */}
             <div className="hidden sm:flex items-center space-x-3">
-              <Link
-                to="/login"
-                className="text-neutral-400 hover:text-accent-500 transition-colors duration-300 font-medium font-body"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="btn btn-primary text-sm px-4 py-2"
-              >
-                Sign Up
-              </Link>
+              {!user ? (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-neutral-400 hover:text-accent-500 transition-colors duration-300 font-medium font-body"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="btn btn-primary text-sm px-4 py-2"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              ) : (
+                <div className="flex items-center space-x-3">
+                  <Link to="/dashboard" className="flex items-center space-x-2 text-neutral-300 hover:text-accent-500">
+                    <div className="w-8 h-8 rounded-xl bg-accent-500/20 flex items-center justify-center font-bold">
+                      {(user.displayName?.[0] || user.email?.[0] || 'U').toUpperCase()}
+                    </div>
+                    <span className="hidden md:block font-body">{user.displayName || user.email}</span>
+                  </Link>
+                  <button onClick={logout} className="btn btn-secondary text-sm px-3 py-2">Logout</button>
+                </div>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -159,21 +175,37 @@ const Header = () => {
             
             {/* Mobile User Actions */}
             <div className="pt-4 border-t border-white/10 space-y-3">
-              <Link
-                to="/login"
-                onClick={() => setIsMenuOpen(false)}
-                className="flex items-center space-x-4 px-4 py-3 rounded-xl text-neutral-300 hover:bg-white/5 hover:text-accent-500 transition-all duration-300"
-              >
-                <span className="text-xl">👤</span>
-                <span className="font-body font-medium">Login</span>
-              </Link>
-              <Link
-                to="/register"
-                onClick={() => setIsMenuOpen(false)}
-                className="btn btn-primary w-full justify-center"
-              >
-                Sign Up
-              </Link>
+              {!user ? (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center space-x-4 px-4 py-3 rounded-xl text-neutral-300 hover:bg-white/5 hover:text-accent-500 transition-all duration-300"
+                  >
+                    <span className="text-xl">👤</span>
+                    <span className="font-body font-medium">Login</span>
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="btn btn-primary w-full justify-center"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center space-x-4 px-4 py-3 rounded-xl text-neutral-300 hover:bg-white/5 hover:text-accent-500 transition-all duration-300"
+                  >
+                    <span className="text-xl">📋</span>
+                    <span className="font-body font-medium">Dashboard</span>
+                  </Link>
+                  <button onClick={() => { setIsMenuOpen(false); logout(); }} className="btn btn-secondary w-full justify-center">Logout</button>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -1,74 +1,42 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { useCart } from '../context/CartContext';
-import { useOrders } from '../context/OrdersContext';
-import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { user } = useAuth();
-  const { cartItems, totalAmount } = useCart();
-  const { orders } = useOrders();
+	const { user, logout } = useAuth();
 
-  return (
-    <div className="min-h-screen bg-black text-white pt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-display font-bold text-gradient mb-8">Your Dashboard</h1>
+	return (
+		<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+			<div className="text-center mb-10">
+				<h1 className="text-4xl font-display font-bold text-gradient">Your Dashboard</h1>
+				<p className="text-neutral-400 mt-2">Manage your account and orders.</p>
+			</div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Purchases */}
-          <section className="lg:col-span-2 card glass p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold">Purchases</h2>
-            </div>
-            {orders.length === 0 ? (
-              <div className="text-neutral-400">No purchases yet. <Link to="/products" className="text-accent-500">Browse products</Link>.</div>
-            ) : (
-              <ul className="space-y-4">
-                {orders.map(order => (
-                  <li key={order.id} className="border border-white/10 rounded-xl p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="text-neutral-300 text-sm">{new Date(order.createdAt).toLocaleString()}</div>
-                      <div className="text-accent-500 font-medium">${order.total.toFixed(2)}</div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {order.items.map((it, idx) => (
-                        <div key={idx} className="bg-neutral-900/50 rounded-lg p-3 flex items-center justify-between">
-                          <div className="text-sm text-neutral-300">{it.name} × {it.quantity}</div>
-                          <div className="text-sm text-neutral-400">${(it.price * it.quantity).toFixed(2)}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+				<div className="md:col-span-1 card glass p-6">
+					<div className="w-20 h-20 rounded-2xl bg-accent-500/20 flex items-center justify-center text-3xl mb-4">
+						{(user?.displayName?.[0] || user?.email?.[0] || 'U').toUpperCase()}
+					</div>
+					<div className="space-y-1">
+						<div className="text-neutral-300 font-medium">{user?.displayName || 'User'}</div>
+						<div className="text-neutral-400 text-sm">{user?.email}</div>
+					</div>
+					<button onClick={logout} className="btn btn-secondary w-full mt-6">Log out</button>
+				</div>
 
-          {/* Cart snapshot */}
-          <aside className="card glass p-6">
-            <h3 className="text-xl font-bold mb-4">In your cart</h3>
-            {cartItems.length === 0 ? (
-              <div className="text-neutral-400">Cart is empty.</div>
-            ) : (
-              <div className="space-y-3">
-                {cartItems.map((it) => (
-                  <div key={it.id} className="flex items-center justify-between text-sm">
-                    <div className="text-neutral-300">{it.name} × {it.quantity}</div>
-                    <div className="text-neutral-400">${(it.price * it.quantity).toFixed(2)}</div>
-                  </div>
-                ))}
-                <div className="border-t border-white/10 pt-3 flex items-center justify-between font-medium">
-                  <div>Total</div>
-                  <div className="text-accent-500">${totalAmount.toFixed(2)}</div>
-                </div>
-                <Link to="/checkout" className="btn btn-primary w-full">Checkout</Link>
-              </div>
-            )}
-          </aside>
-        </div>
-      </div>
-    </div>
-  );
+				<div className="md:col-span-2 space-y-6">
+					<div className="card glass p-6">
+						<h2 className="text-xl font-display font-bold text-white mb-4">Recent Activity</h2>
+						<p className="text-neutral-400">No recent activity yet.</p>
+					</div>
+					<div className="card glass p-6">
+						<h2 className="text-xl font-display font-bold text-white mb-4">Orders</h2>
+						<p className="text-neutral-400">You don’t have any orders yet.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Dashboard;
+
